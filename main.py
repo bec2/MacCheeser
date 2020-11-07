@@ -37,56 +37,33 @@ def macprinter():
     getmymac()
     top.mainloop()
 
-#who is this mac
-
 #obfuscate me
 def cheeser():
-    def get_args():
-        #Get interface stuff
-        prsr = argparse.ArgumentParser()
-        prsr.add_argument("-i","--interface",dest="interface",help="Name of interface.")
-        options = prsr.parse_args()
-        if options.interface:
-            return options.interface
-        else:
-            prsr.error("Oopsy woopsy syntax error did a bungly wungly uwu")
-    def changer(interface, new_mac_address):
-        #Does the terminal commands
-        subprocess.call(["sudo","ifconfig",interface,"down"])
-        subprocess.call(["sudo","ifconfig",interface,"hw","ether",new_mac_address])
-        subprocess.call(["sudo","ifconfig",interface,"up"])
-    def get_random_mac():
-        #Randomizes
-        charset="0123456789abcdef"
-        random_mac="00"
-        for i in range(5):
-            random_mac += ":" + \
-                          random.choice(charset) \
-                          + random.choice(charset)
-            return random_mac
-    def get_original(interface):
-        #Holds the current MAC for restoration purposes
-        output=subprocess.check_output(["ifconfig",interface])
-        return re.search("\w\w:\w\w:\w\w:\w\w:\w\w:\w\w",str(output)).group(0)
-
-    #Now let's do the magic and change the mac every 2 minutes
-    if __name__ == "__main__":
-        print("Initializing MAC cheeser. Generating new MAC every 2 minutes.")
-        sleeper=120
-        interface=get_args()
-        current_mac=get_original(interface)
-        try:
-            while True:
-                random_mac=get_random_mac()
-                change_mac(interface,random_mac)
-                new_mac_info=subprocess.check_output(["ifconfig",interface])
-                if random_mac in str(new_mac_info):
-                    print("New MAC:",random_mac,end=" ")
-                    sys.stdout.flush()
-                    time.sleep(sleeper)
-        except KeyboardInterrupt:
-            change_mac(interface,current_mac)
-            print("Original MAC restored. Terminating the cheeser.")
+    #Look after the original MAC
+    original=(gma())
+    #Randomize a new address
+    charset="0123456789abcdef"
+    randommac="00"
+    for i in range(5):
+        randommac += ":" +\
+                        random.choice(charset)\
+                        + random.choice(charset)
+    #do the terminal commands
+    def subproc():
+        subprocess.call(["sudo","ifconfig","wlp3s0","down"])
+        subprocess.call(["sudo","ifconfig","wlp3s0","hw","ether",randommac])
+        subprocess.call(["sudo","ifconfig","wlp3s0","up"])
+        
+    subproc()    
+    print("Your MAC has been cheesed. New MAC:" + randommac)
+    print("The new MAC will expire in 60 seconds and be reverted.")
+    print("KEEP THIS PROGRAM OPEN.")
+    time.sleep(60)
+    subprocess.call(["sudo","ifconfig","wlp3s0","down"])
+    subprocess.call(["sudo","ifconfig","wlp3s0","hw","ether",original])
+    subprocess.call(["sudo","ifconfig","wlp3s0","up"])
+    print("Old MAC restored:" + original)
+    
         
 
 #info
