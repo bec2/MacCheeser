@@ -1,2 +1,2 @@
 # MacCheeser
-Cheese your MAC, or find out who's cheesing theirs.
+Cheese your MAC on Linux.
