@@ -23,17 +23,20 @@ cv.create_image(0,0,image=bg_image,anchor='nw')
 mainframe=tk.Frame(root)
 
 #whats my mac
-def getmymac():
+def legacy():
     print(gma())
 
 def macprinter():
     top=Toplevel(root)
     top.title=("Your MAC address is...")
-    top.geometry("500x100")
-    w2='500'
+    top.geometry("200x100")
+    w2='200'
     h2='100'
     cv2=tk.Canvas(master=top, width=w2,height=h2)
     cv2.pack(side='top',fill='y',expand='no')
+    def getmymac():
+        mactext=(gma())
+        cv2.create_text(15,20,text=mactext,fill="black",anchor='nw')
     getmymac()
     top.mainloop()
 
