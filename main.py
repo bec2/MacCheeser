@@ -63,6 +63,7 @@ def cheeser():
     subprocess.call(["sudo","ifconfig","wlp3s0","hw","ether",original])
     subprocess.call(["sudo","ifconfig","wlp3s0","up"])
     print("Old MAC restored:" + original)
+    print("Safe to close.")
     
         
 
